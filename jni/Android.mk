@@ -1,7 +1,8 @@
 LOCAL_PATH := $(call my-dir) 
 
-include $(CLEAR_VARS)
+include $(CLEAR_VARS) 
 
+OPENCV_LIB_TYPE:=STATIC
 OPENCV_CAMERA_MODULES:=on
 OPENCV_INSTALL_MODULES:=on
  
