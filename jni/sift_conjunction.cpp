@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string>
 #include <opencv2/opencv.hpp>
+#include <android/log.h>
 using namespace cv;
 
 extern "C"
@@ -39,12 +40,19 @@ extern "C"
 #define IMG_MOSAIC_BEFORE_FUSION "重叠区域融合前"
 #define IMG_MOSAIC_PROC "处理后的拼接图"
 
+#define LOG    "libsift-jni"
+#define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG,__VA_ARGS__)
+#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG,__VA_ARGS__)
+#define LOGW(...)  __android_log_print(ANDROID_LOG_WARN,LOG,__VA_ARGS__)
+#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG,__VA_ARGS__)
+#define LOGF(...)  __android_log_print(ANDROID_LOG_FATAL,LOG,__VA_ARGS__)
+
 JNIEXPORT jint JNICALL Java_com_LibSift_namespace_SiftFun_siftConjunction
 (JNIEnv * env, jclass cls, jstring jfilename1, jstring jfilename2)
 {
+	LOGD(LOG, "这是Debug的信息");
 	const char* filename1 = env->GetStringUTFChars(jfilename1, NULL);
     const char* filename2 = env->GetStringUTFChars(jfilename2, NULL);
-	
 	int open_image_number;//打开图片个数
     string name1,name2;//两张图片的文件名
     IplImage *img1, *img2;//IplImage格式的原图
@@ -86,7 +94,7 @@ JNIEXPORT jint JNICALL Java_com_LibSift_namespace_SiftFun_siftConjunction
     draw_features( img2_Feat, feat2, n2 );//画出特征点
 	string name2_Feat = img_name2;
     //cvSaveImage(name2_Feat.insert( name2_Feat.find_last_of(".",-1) , "_Feat").c_str(),img2_Feat);//保存图片
-	
+
 
 	stacked = stack_imgs_horizontal(img1, img2);
 	kd_root = kdtree_build( feat1, n1 );
@@ -168,12 +176,13 @@ JNIEXPORT jint JNICALL Java_com_LibSift_namespace_SiftFun_siftConjunction
                 IplImage * temp = img2;
                 img2 = img1;
                 img1 = temp;
-       
+
             }
             else//H不可逆时，返回0
             {
                 cvReleaseMat(&H_IVT);//释放逆阵H_IVT
                 std::cout<<"警告"<<"变换矩阵H不可逆"<<std::endl;
+                return -1;
             }
         }
         else
@@ -184,6 +193,7 @@ JNIEXPORT jint JNICALL Java_com_LibSift_namespace_SiftFun_siftConjunction
     else //无法计算出变换矩阵，即两幅图中没有重合区域
     {
        std::cout<<"警告"<<"两图中无公共区域"<<std::endl;
+       return -2;
     }
 
 
@@ -299,23 +309,23 @@ JNIEXPORT jint JNICALL Java_com_LibSift_namespace_SiftFun_siftConjunction
         free(inliers);//释放内点数组
 
         //释放RANSAC算法筛选后的匹配图
-        cvReleaseImage(&stacked_ransac);
-        cvDestroyWindow(IMG_MATCH2);
+       // cvReleaseImage(&stacked_ransac);
+        //cvDestroyWindow(IMG_MATCH2);
 
         //释放全景拼接图像
-        if(xformed)
-        {
-            cvReleaseImage(&xformed);
-            cvReleaseImage(&xformed_simple);
-            cvReleaseImage(&xformed_proc);
-            cvDestroyWindow(IMG_MOSAIC_TEMP);
-            cvDestroyWindow(IMG_MOSAIC_SIMPLE);
-            cvDestroyWindow(IMG_MOSAIC_BEFORE_FUSION);
-            cvDestroyWindow(IMG_MOSAIC_PROC);
-        }
+        //if(xformed)
+       // {
+            //cvReleaseImage(&xformed);
+            //cvReleaseImage(&xformed_simple);
+            //cvReleaseImage(&xformed_proc);
+            //cvDestroyWindow(IMG_MOSAIC_TEMP);
+            //cvDestroyWindow(IMG_MOSAIC_SIMPLE);
+            //cvDestroyWindow(IMG_MOSAIC_BEFORE_FUSION);
+            //cvDestroyWindow(IMG_MOSAIC_PROC);
+       // }
     }
     verticalStackFlag = false;//显示匹配结果的合成图片的排列方向标识复位
-	
+    return 0;
 }
 
 

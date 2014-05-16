@@ -113,6 +113,7 @@ E:/hackathon_env/LibSift//obj/local/armeabi-v7a/objs/siftConjunction/sift_conjun
  E:/hackathon_env/LibSift//jni/opencv2/contrib/contrib.hpp \
  E:/hackathon_env/LibSift//jni/opencv2/contrib/retina.hpp \
  E:/hackathon_env/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/valarray \
+ E:/hackathon_env/android-ndk-r9d/platforms/android-8/arch-arm/usr/include/android/log.h \
  E:/hackathon_env/LibSift//jni/imgfeatures.h \
  E:/hackathon_env/LibSift//jni/cxcore.h \
  E:/hackathon_env/LibSift//jni/kdtree.h \
@@ -347,6 +348,8 @@ E:/hackathon_env/LibSift//jni/opencv2/contrib/contrib.hpp:
 E:/hackathon_env/LibSift//jni/opencv2/contrib/retina.hpp:
 
 E:/hackathon_env/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/valarray:
+
+E:/hackathon_env/android-ndk-r9d/platforms/android-8/arch-arm/usr/include/android/log.h:
 
 E:/hackathon_env/LibSift//jni/imgfeatures.h:
 
